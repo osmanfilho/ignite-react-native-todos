@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 
 import { Header } from '../components/Header';
@@ -8,16 +8,29 @@ import { TodoInput } from '../components/TodoInput';
 export function Home() {
   const [tasks, setTasks] = useState<Task[]>([]);
 
+  useEffect(() => console.log(tasks), [tasks]);
+
   function handleAddTask(newTaskTitle: string) {
-    //TODO - add new task
+    setTasks(oldState => oldState.concat({
+      ...oldState,
+      id: new Date().getTime(),
+      title: newTaskTitle
+    }));
   }
 
   function handleToggleTaskDone(id: number) {
-    //TODO - toggle task done if exists
+    setTasks(oldState => oldState.map(task => {
+      return task.id === id ? {
+        ...task,
+        done: !task.done
+      } : {
+        ...task
+      }
+    }));
   }
 
   function handleRemoveTask(id: number) {
-    //TODO - remove task from state
+    setTasks(oldState => oldState.filter(task => task.id !== id));
   }
 
   return (
